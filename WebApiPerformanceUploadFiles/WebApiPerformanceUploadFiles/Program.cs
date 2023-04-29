@@ -13,29 +13,31 @@ builder.Services.AddControllers(options =>
     options.ReturnHttpNotAcceptable = true;
     //options.FormatterMappings.SetMediaTypeMappingForFormat("ContentType", MediaTypeHeaderValue.Parse("application/octet-stream"));
 });
-builder.Services.AddMvc();  
-//builder.Services.AddResponseCompression(options =>
-//{
-//    IEnumerable<string> MimeTypes = new[]
-// {
-//         // General
-//         "text/plain",
-//         "text/html",
-//         "text/css",
-//         "font/woff2",
-//         "application/javascript",
-//         "image/x-icon",
-//         "image/png",
-//         "image/jpeg",
-//         "image/jpg"
-//     };
+builder.Services.AddMvc();
+builder.Services.AddResponseCaching();
 
-//    options.EnableForHttps = true;
-//    options.MimeTypes = MimeTypes;
-//    options.Providers.Add<GzipCompressionProvider>();
-//    options.Providers.Add<BrotliCompressionProvider>();
+builder.Services.AddResponseCompression(options =>
+{
+    IEnumerable<string> MimeTypes = new[]
+ {
+         // General
+         "text/plain",
+         "text/html",
+         "text/css",
+         "font/woff2",
+         "application/javascript",
+         "image/x-icon",
+         "image/png",
+         "image/jpeg",
+         "image/jpg"
+     };
 
-//});
+    options.EnableForHttps = true;
+    options.MimeTypes = MimeTypes;
+    options.Providers.Add<GzipCompressionProvider>();
+    options.Providers.Add<BrotliCompressionProvider>();
+
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -83,7 +85,7 @@ app.UseStaticFiles(new StaticFileOptions()
 //    }
 //});
 
-//app.UseResponseCompression();
+app.UseResponseCompression();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

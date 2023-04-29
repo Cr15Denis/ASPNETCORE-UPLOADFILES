@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml.Linq;
 using WebApiPerformanceUploadFiles.Interface;
 using WebApiPerformanceUploadFiles.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -71,46 +72,7 @@ namespace WebApiPerformanceUploadFiles.Controllers
             return Ok();
         }
 
-        //public static async Task<int> ReadStream(Stream stream, int bufferSize)
-        //{
-        //    var buffer = new byte[bufferSize];
-
-        //    int bytesRead;
-        //    int totalBytes = 0;
-
-        //    do
-        //    {
-        //        bytesRead = await stream.ReadAsync(buffer, 0, bufferSize);
-        //        totalBytes += bytesRead;
-        //    } while (bytesRead > 0);
-        //    return totalBytes;
-        //}
-        //static string CreateTempfilePath()
-        //{
-        //    var filename = $"{Guid.NewGuid()}.tmp";
-        //    var directoryPath = Path.Combine("temp", "uploads");
-        //    if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
-
-        //    return Path.Combine(directoryPath, filename);
-        //}
-
-        //[Route("/Page/Image")]
-        //public IActionResult GetMovePage(string name)
-        //{
-        //    //var url = $"/Files/Movies?fileName={fileName}";
-        //    //if (string.IsNullOrEmpty(directory) == false)
-        //    //{
-        //    //    url += $"&directory={directory}";
-        //    //}
-        //    //ViewData["url"] = url;
-
-        //    //return View("./Views/MoviePage.cshtml");
-
-        //    //ViewData["Greeting"] = "Hello World!";
-        //    //return View();
-           
-        //}
-
+  
         [HttpGet("display")]
         public async Task<FileStreamResult> Get3()
         {
@@ -139,7 +101,7 @@ namespace WebApiPerformanceUploadFiles.Controllers
             return await _client.GetStreamAsync(urlBlob);
         }
 
-        //[ResponseCache(Duration = 600)]
+        [ResponseCache(Duration = 600)] //UN ARCHIVO DE 5MB LO REDUCE DE 5S A 400MS
         [Route("Files")]
         [HttpGet]
         public IActionResult GetMovie()
@@ -152,19 +114,23 @@ namespace WebApiPerformanceUploadFiles.Controllers
             //    var stream = provider.GetFileInfo("earth.mp4").CreateReadStream();
             //    return File(stream, "video/mp4");
             //}
-             
+
+            //NO ES CON CACHE PERO SE PUEDE PETICIONES MASIVAS
             //Byte[] b;
-           // b = System.IO.File.ReadAllBytes("D:/PruebasImagenes/7df59d50-c2fc-4a53-9dd1-c20c8afec771.png");
-            var filePath = Path.Combine($"D:/PruebasImagenes/7df59d50-c2fc-4a53-9dd1-c20c8afec771.png");
-            return  PhysicalFile(filePath, "image/jpeg");
+            //b = System.IO.File.ReadAllBytes("D:/PruebasImagenes/7df59d50-c2fc-4a53-9dd1-c20c8afec771.png");
             //return File(b, "image/jpeg");
+
+            //NO ES CON CACHE PERO SE PUEDE PETICIONES MASIVAS
+            //var image = System.IO.File.OpenRead($"D:/PruebasImagenes/7df59d50-c2fc-4a53-9dd1-c20c8afec771.png");
+            //return File(image, "image/jpeg");
+
+            //SI ES CON CACHE Y TAMBIEN SE PUEDE PETICIONES MASIVAS
+            var filePath = Path.Combine($"D:/PruebasImagenes/2b0f530d-20bc-4232-bc2f-6e46b666e7f9.jpg");
+            return PhysicalFile(filePath, "image/png");
+
+
         }
 
-        //[HttpGet("images-byte")]
-        //public IActionResult ReturnByteArray()
-        //{
-        //    var image = _fileService.GetImageAsByteArray();
-        //    return File(image, MimeType, FileName);
-        //}
+
     }
 }
